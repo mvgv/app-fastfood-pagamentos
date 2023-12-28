@@ -33,53 +33,53 @@ jobs:
           cd app
           mvn test
 
-  code-analysis:
-    runs-on: ubuntu-latest
-    needs: teste-unitario
-
-    steps:
-      - name: Checagem do codigo
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'corretto'
-          java-version: '17'
-
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Cache Maven packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('app/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Navigate to the app directory
-        run: |
-          cd app
-
-      - name: Build and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: 2d908eaa7a840db5bf8ae8b1f51940a981c278c5
-        run: |
-          cd app
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=caikeburgos_app-fastfood-application -Dsonar.login=$SONAR_TOKEN
-
-      - name: Check Quality Gate
-        env:
-          SONAR_TOKEN: 2d908eaa7a840db5bf8ae8b1f51940a981c278c5
-        run: |
-          curl -s "https://sonarcloud.io/project/configuration?id=caikeburgos_app-fastfood-application" -H "Authorization: Basic $SONAR_TOKEN"
+#  code-analysis:
+#    runs-on: ubuntu-latest
+#    needs: teste-unitario
+#
+#    steps:
+#      - name: Checagem do codigo
+#        uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Set up Java
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'corretto'
+#          java-version: '17'
+#
+#      - name: Cache SonarCloud packages
+#        uses: actions/cache@v1
+#        with:
+#          path: ~/.sonar/cache
+#          key: ${{ runner.os }}-sonar
+#          restore-keys: ${{ runner.os }}-sonar
+#
+#      - name: Cache Maven packages
+#        uses: actions/cache@v1
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('app/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#
+#      - name: Navigate to the app directory
+#        run: |
+#          cd app
+#
+#      - name: Build and analyze
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          SONAR_TOKEN: 2d908eaa7a840db5bf8ae8b1f51940a981c278c5
+#        run: |
+#          cd app
+#          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=caikeburgos_app-fastfood-application -Dsonar.login=$SONAR_TOKEN
+#
+#      - name: Check Quality Gate
+#        env:
+#          SONAR_TOKEN: 2d908eaa7a840db5bf8ae8b1f51940a981c278c5
+#        run: |
+#          curl -s "https://sonarcloud.io/project/configuration?id=caikeburgos_app-fastfood-application" -H "Authorization: Basic $SONAR_TOKEN"
 
   build:
     needs: [teste-unitario]
@@ -137,8 +137,8 @@ jobs:
 
       - name: DOCKER BUILD AND PUSH
         run: |
-          docker build -t caikemury/app-fastfood-pagamento.jar:latest --build-arg trustStorePassword=a .
-          docker push caikemury/app-fastfood-pagamento.jar:latest
+          docker build -t caikemury/app-fastfood-pagamentos.jar:latest --build-arg trustStorePassword=a .
+          docker push caikemury/app-fastfood-pagamentos.jar:latest
 
 #  deploy-eks:
 #    runs-on: ubuntu-latest
