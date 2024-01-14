@@ -55,10 +55,6 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-      - name: Entra na pasta App
-        run: |
-          cd app
-
       - name: Exectar testes unitarios
         run: |
           cd app
