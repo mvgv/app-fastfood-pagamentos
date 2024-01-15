@@ -40,7 +40,7 @@ jobs:
           name: app
           path: '${{ github.workspace }}/app/target/app/app-fastfood-pagamento.jar'
 
-  teste-unitario:
+  testes:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
@@ -96,9 +96,7 @@ jobs:
   publish-docker:
 
     runs-on: ubuntu-latest
-    needs:
-      - teste-unitario
-#      - code-analysis
+    needs: [testes, code-analysis]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
