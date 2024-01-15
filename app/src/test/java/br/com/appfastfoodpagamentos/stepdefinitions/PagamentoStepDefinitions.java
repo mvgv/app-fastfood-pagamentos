@@ -1,40 +1,51 @@
 package br.com.appfastfoodpagamentos.stepdefinitions;
+import br.com.appfastfoodpagamentos.AppFastfoodPagamentosApplication;
+import br.com.appfastfoodpagamentos.config.CucumberSpringConfiguration;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Quando;
 import io.cucumber.java.pt.Entao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import io.cucumber.spring.CucumberContextConfiguration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes=AppFastfoodPagamentosApplication.class)
+@CucumberContextConfiguration
+
 @AutoConfigureMockMvc
-public class PagamentoStepDefinitions {
+public class PagamentoStepDefinitions  {
     @Autowired
     private MockMvc mockMvc;
 
     private String requestBody;
     private MockHttpServletResponse response;
 
-    @Dado("eu tenho uma requisição de pagamento válida")
-    public void eu_tenho_uma_requisicao_de_pagamento_valida() throws Exception {
+    @Dado("que eu tenho uma requisicao de pagamento valida")
+    public void que_eu_tenho_uma_requisicao_de_pagamento_valida() throws Exception{
         requestBody = "{ \"valor\": 100.00 }";
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/pagamentos").content(requestBody))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/pagamentos")
+                        .content(requestBody)
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)) // Adiciona o cabeçalho aqui
                 .andReturn();
         response = mvcResult.getResponse();
     }
 
     @Quando("eu tento efetuar um pagamento")
     public void eu_tento_efetuar_um_pagamento() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/pagamentos").content(requestBody))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/pagamentos")
+                        .content(requestBody)
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)) // Adiciona o cabeçalho aqui
                 .andReturn();
         response = mvcResult.getResponse();
     }
@@ -44,10 +55,12 @@ public class PagamentoStepDefinitions {
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
-    @Dado("eu tenho uma requisição de pagamento inválida")
+    @Dado("que eu tenho uma requisição de pagamento invalida")
     public void eu_tenho_uma_requisicao_de_pagamento_invalida() throws Exception {
         requestBody = "{ \"valor\": -100.00 }";
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/pagamentos").content(requestBody))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/pagamentos")
+                        .content(requestBody)
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)) // Adiciona o cabeçalho aqui
                 .andReturn();
         response = mvcResult.getResponse();
     }
