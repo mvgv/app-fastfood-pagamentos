@@ -1,12 +1,18 @@
 package br.com.appfastfoodpagamentos;
 
 
-import io.cucumber.junit.platform.engine.Cucumber;
-import org.junit.platform.suite.api.SelectPackages;
-import org.junit.platform.suite.api.Suite;
+import br.com.appfastfoodpagamentos.config.CucumberSpringConfiguration;
+
+import org.junit.platform.suite.api.*;
+
+import static io.cucumber.core.options.Constants.*;
+
 
 @Suite
-@SelectPackages("br.com.appfastfoodpagamentos.stepdefinitions")
-@Cucumber
+@SelectClasspathResource("features")
+@ConfigurationParameters({
+        @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "br.com.appfastfoodpagamentos.stepdefinitions"),
+        @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "html")
+})
 public class CucumberRunnerTest {
 }
