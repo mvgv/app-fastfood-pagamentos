@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appfastfood-pagamentos-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: appfastfood-pagamentos
+  template:
+    metadata:
+      labels:
+        app: appfastfood-pagamentos
+    spec:
+      containers:
+        - name: appfastfood-pagamentos
+          image: caikemury/app-fastfood-pagamentos.jar:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: appfastfood-pagamentos-configmap
+          readinessProbe:
+            httpGet:
+              path: /healthCheck   # Rota de verificação de saúde do seu aplicativo
+              port: 8080            # Porta em que o seu aplicativo está ouvindo
+            initialDelaySeconds: 10
+            periodSeconds: 5
