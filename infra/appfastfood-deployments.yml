@@ -17,9 +17,6 @@ spec:
           image: caikemury/app-fastfood-pagamentos.jar:latest
           ports:
             - containerPort: 8080
-          envFrom:
-            - configMapRef:
-                name: appfastfood-pagamentos-configmap
           readinessProbe:
             httpGet:
               path: /healthCheck   # Rota de verificação de saúde do seu aplicativo
