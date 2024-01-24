@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.io.UnsupportedEncodingException;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes=AppFastfoodPagamentosApplication.class)
 @CucumberContextConfiguration
 
@@ -31,9 +33,9 @@ public class PagamentoStepDefinitions  {
     private String requestBody;
     private MockHttpServletResponse response;
 
-    @Dado("que eu tenho uma requisicao de pagamento valida")
-    public void que_eu_tenho_uma_requisicao_de_pagamento_valida() throws Exception{
-        requestBody = "{ \"valor\": 100.00 }";
+    @Dado("que eu tenho uma requisicao de pagamento valida com valor de {double}")
+    public void que_eu_tenho_uma_requisicao_de_pagamento_valida_com_valor_de(Double double1)  throws Exception{
+        requestBody = "{ \"valor\": 15.00 }";
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/pagamentos")
                         .content(requestBody)
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)) // Adiciona o cabeçalho aqui
@@ -51,13 +53,16 @@ public class PagamentoStepDefinitions  {
     }
 
     @Entao("o pagamento deve ser aprovado")
-    public void o_pagamento_deve_ser_aprovado() {
+    public void o_pagamento_deve_ser_aprovado() throws UnsupportedEncodingException {
+        String status = "APROVADO";
         assertEquals(HttpStatus.OK.value(), response.getStatus());
+        String responseBody = response.getContentAsString();
+        assertEquals(true, responseBody.contains(status));
     }
 
-    @Dado("que eu tenho uma requisição de pagamento invalida")
-    public void eu_tenho_uma_requisicao_de_pagamento_invalida() throws Exception {
-        requestBody = "{ \"valor\": -100.00 }";
+    @Dado("que eu tenho uma requisição de pagamento invalida com valor de {double}")
+    public void que_eu_tenho_uma_requisição_de_pagamento_invalida_com_valor_de(Double double1) throws Exception {
+        requestBody = "{ \"valor\": 5.00 }";
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/pagamentos")
                         .content(requestBody)
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)) // Adiciona o cabeçalho aqui
@@ -66,7 +71,10 @@ public class PagamentoStepDefinitions  {
     }
 
     @Entao("devo receber uma resposta de erro")
-    public void devo_receber_uma_resposta_de_erro() {
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+    public void devo_receber_uma_resposta_de_erro() throws UnsupportedEncodingException {
+        String status = "REPROVADO";
+        String responseBody = response.getContentAsString();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(true, responseBody.contains(status));
     }
 }
