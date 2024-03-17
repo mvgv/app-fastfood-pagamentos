@@ -19,7 +19,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @RestController
-@RequestMapping("/pagamentos")
+@RequestMapping("/efetua-pagamento")
 public class PagamentosEventoController {
 
     private SolicitarPagamento solicitarPagamento;

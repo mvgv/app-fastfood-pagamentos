@@ -32,14 +32,13 @@ public class SolicitarPagamentoMercadoLivreImpl implements SolicitarPagamento{
     private void publicarPagamento(Boolean efetuouPagamento, PagamentoOut out) {
 
         try {
-            String mapper = new ObjectMapper().writeValueAsString(out);
 
             if(efetuouPagamento == true) {
                 out.setStatusPagamento("APROVADO");
-                this.topicHandler.publish(mapper, "arn:aws:sns:us-east-1:000000000000:pagamento-efetuado");
+                this.topicHandler.publish(new ObjectMapper().writeValueAsString(out), "arn:aws:sns:us-east-1:000000000000:pagamento-efetuado");
             } else {
                 out.setStatusPagamento("RECUSADO");
-                this.topicHandler.publish(mapper, "arn:aws:sns:us-east-1:000000000000:pagamento-recusado");
+                this.topicHandler.publish(new ObjectMapper().writeValueAsString(out), "arn:aws:sns:us-east-1:000000000000:pagamento-recusado");
             }
 
         } catch (JsonProcessingException e) {

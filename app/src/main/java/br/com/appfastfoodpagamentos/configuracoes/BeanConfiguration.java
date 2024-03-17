@@ -4,6 +4,7 @@ import br.com.appfastfoodpagamentos.AppFastfoodPagamentosApplication;
 import br.com.appfastfoodpagamentos.casodeuso.SolicitarPagamento;
 import br.com.appfastfoodpagamentos.casodeuso.SolicitarPagamentoMercadoLivreImpl;
 import br.com.appfastfoodpagamentos.infraestrutura.AdaptadorMercadoLivre;
+import br.com.appfastfoodpagamentos.infraestrutura.adaptadores.SNSTopicHandlerImpl;
 import br.com.appfastfoodpagamentos.infraestrutura.menssagem.portas.TopicHandler;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -17,6 +18,10 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackageClasses = AppFastfoodPagamentosApplication.class)
 public class BeanConfiguration {
 
+    @Bean
+    TopicHandler topicHandler(){
+        return new SNSTopicHandlerImpl(amazonSNS());
+    }
     @Bean
     AdaptadorMercadoLivre adaptadorMercadoLivre() {
         return new AdaptadorMercadoLivre();
