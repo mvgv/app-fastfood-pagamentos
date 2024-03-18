@@ -8,6 +8,8 @@ import br.com.appfastfoodpagamentos.infraestrutura.adaptadores.SNSTopicHandlerIm
 import br.com.appfastfoodpagamentos.infraestrutura.menssagem.portas.TopicHandler;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import org.springframework.context.annotation.Bean;
@@ -35,8 +37,8 @@ public class BeanConfiguration {
     public AmazonSNS amazonSNS() {
         // Configuração básica de um cliente AmazonSNS usando as credenciais padrão do SDK
         return AmazonSNSClientBuilder.standard()
-                .withEndpointConfiguration(new AmazonSNSClientBuilder.EndpointConfiguration("http://localhost.localstack.cloud:4566", "us-east-1"))
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials("test", "test")))
+                .withRegion(Regions.US_EAST_1)
+                .withCredentials(new DefaultAWSCredentialsProviderChain())
                 .build();
     }
 }
