@@ -1,9 +1,6 @@
 package br.com.appfastfoodpagamentos.dominio;
 
-import br.com.appfastfoodpagamentos.apresentacao.PagamentosController;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.UUID;
 
@@ -36,6 +33,10 @@ public class Pagamento {
         this.idMeioPagamento = idMeioPagamento;
         this.valor = valorConsistente(valor);
         this.aprovado = aprovado;
+    }
+
+    public Pagamento(Double valor) {
+        this.valor = valor;
     }
 
     private Double valorConsistente(String valor) throws IllegalArgumentException {
